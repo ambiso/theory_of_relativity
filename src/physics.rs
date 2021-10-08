@@ -6,7 +6,7 @@ pub struct PhysicsPlugin;
 
 #[derive(Default)]
 pub struct PhysicsObject {
-	momentum: Vec3,
+    momentum: Vec3,
 }
 
 impl Plugin for PhysicsPlugin {
@@ -27,20 +27,20 @@ fn physics_update(
         let mut influences = Vec3::ZERO;
         for (other_pos, _) in query.q0().iter() {
             let delta = other_pos.0.translation - my_pos.0.translation;
-			let len = delta.length();
-			if len > 100. {
-				influences += delta / len / len / len;
-			}
+            let len = delta.length();
+            if len > 100. {
+                influences += delta / len / len / len;
+            }
         }
         influences *= time.delta_seconds();
-		influences *= 10000.;
-		physics_object.momentum += influences;
+        influences *= 10000.;
+        physics_object.momentum += influences;
     }
     for ((mut position, mut transform), physics_object) in
         query.q1_mut().iter_mut().zip(q2.iter_mut())
     {
         position.0.translation += physics_object.momentum;
-		*transform = position.0;
+        *transform = position.0;
         println!("Delta: {}", physics_object.momentum);
     }
 }
