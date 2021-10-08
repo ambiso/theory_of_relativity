@@ -28,8 +28,9 @@ fn physics_update(
         for (other_pos, _) in query.q0().iter() {
             let delta = other_pos.0.translation - my_pos.0.translation;
             let len = delta.length();
+            let delta = delta / len;
             if len > 100. {
-                influences += delta / len / len / len;
+                influences += delta / len / len;
             }
         }
         influences *= time.delta_seconds();
