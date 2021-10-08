@@ -12,7 +12,7 @@ impl Plugin for PhysicsPlugin {
 }
 
 fn physics(query: Query<&Pos, With<PhysicsObject>>) {
-    for pos in query.iter() {
-        println!("Wow there's an entity at {}", pos.0);
-    }
+    // for pos in query.iter() {
+        // println!("Wow there's an entity at {}", pos.0);
+    // }
 }

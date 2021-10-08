@@ -15,7 +15,7 @@ fn setup(
     asset_server: Res<AssetServer>,
     mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
-    commands.spawn().insert(OrthographicCameraBundle::new_2d());
+    commands.spawn_bundle(OrthographicCameraBundle::new_2d());
     commands.insert_resource(Materials {
         // default_material: materials.add(Color::rgb(1.0, 1.0, 0.0).into()),
         default_material: materials.add(asset_server.load("branding/icon.png").into()),
@@ -33,9 +33,9 @@ fn spawn_entity(commands: &mut Commands, materials: &Res<Materials>, pos: Pos) {
         .insert(GameObject)
         .insert(PhysicsObject)
         .insert(pos)
-        .insert(SpriteBundle {
+        .insert_bundle(SpriteBundle {
             material: materials.default_material.clone(),
-            // sprite: Sprite::new(Vec2::new(100., 100.)),
+            sprite: Sprite::new(Vec2::new(100., 100.)),
             ..Default::default()
         });
 }
