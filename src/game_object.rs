@@ -1,2 +1,4 @@
+use bevy::prelude::*;
+
 pub struct GameObject;
-pub struct Pos(pub f64);
+pub struct Position(pub Transform);

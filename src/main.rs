@@ -20,24 +20,49 @@ fn setup(
         // default_material: materials.add(Color::rgb(1.0, 1.0, 0.0).into()),
         default_material: materials.add(asset_server.load("branding/icon.png").into()),
     });
+    commands
+        .spawn()
+        .insert(PrintTimer(Timer::from_seconds(1.0, true)));
 }
 
 fn spawn_entities(mut commands: Commands, materials: Res<Materials>) {
-    spawn_entity(&mut commands, &materials, Pos(-1.));
-    // spawn_entity(&mut commands, &materials, Pos(1.));
+    spawn_entity(
+        &mut commands,
+        &materials,
+        Position(Transform::from_translation(Vec3::new(-200., 0., 0.))),
+    );
+    spawn_entity(
+        &mut commands,
+        &materials,
+        Position(Transform::from_translation(Vec3::new(200., 0., 0.))),
+    );
 }
 
-fn spawn_entity(commands: &mut Commands, materials: &Res<Materials>, pos: Pos) {
+fn spawn_entity(commands: &mut Commands, materials: &Res<Materials>, pos: Position) {
+    let transform = pos.0.clone();
     commands
         .spawn()
         .insert(GameObject)
-        .insert(PhysicsObject)
+        .insert(PhysicsObject::default())
         .insert(pos)
         .insert_bundle(SpriteBundle {
             material: materials.default_material.clone(),
             sprite: Sprite::new(Vec2::new(100., 100.)),
+            transform: transform,
             ..Default::default()
         });
+}
+
+pub struct PrintTimer(Timer);
+
+fn tick(time: Res<Time>, sprites: Query<&Sprite>, mut query: Query<&mut PrintTimer>) {
+    for mut timer in query.iter_mut() {
+        timer.0.tick(time.delta());
+
+        if timer.0.just_finished() {
+            println!("Sprites: {}", sprites.iter().count(),);
+        }
+    }
 }
 
 fn main() {
@@ -49,5 +74,6 @@ fn main() {
         )
         .add_plugins(DefaultPlugins)
         .add_plugin(PhysicsPlugin)
+        .add_system(tick.system().label("Tick"))
         .run();
 }
