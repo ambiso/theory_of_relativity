@@ -27,13 +27,13 @@ fn physics_update(
         let mut influences = Vec3::ZERO;
         for (other_pos, _) in query.q0().iter() {
             let delta = other_pos.0.translation - my_pos.0.translation;
-			let len = delta.length_squared();
-			if len > 0.00001 {
-				influences += delta / len;
+			let len = delta.length();
+			if len > 100. {
+				influences += delta / len / len / len;
 			}
         }
         influences *= time.delta_seconds();
-		influences *= 100.;
+		influences *= 10000.;
 		physics_object.momentum += influences;
     }
     for ((mut position, mut transform), physics_object) in
