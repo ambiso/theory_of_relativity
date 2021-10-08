@@ -10,13 +10,15 @@ struct Materials {
     default_material: Handle<ColorMaterial>,
 }
 
-fn setup(mut commands: Commands,
+fn setup(
+    mut commands: Commands,
     asset_server: Res<AssetServer>,
-     mut materials: ResMut<Assets<ColorMaterial>>) {
+    mut materials: ResMut<Assets<ColorMaterial>>,
+) {
     commands.spawn().insert(OrthographicCameraBundle::new_2d());
     commands.insert_resource(Materials {
         // default_material: materials.add(Color::rgb(1.0, 1.0, 0.0).into()),
-        default_material: materials.add(asset_server.load("branding/icon.png").into())
+        default_material: materials.add(asset_server.load("branding/icon.png").into()),
     });
 }
 
@@ -26,7 +28,6 @@ fn spawn_entities(mut commands: Commands, materials: Res<Materials>) {
 }
 
 fn spawn_entity(commands: &mut Commands, materials: &Res<Materials>, pos: Pos) {
-
     commands
         .spawn()
         .insert(GameObject)
@@ -42,7 +43,10 @@ fn spawn_entity(commands: &mut Commands, materials: &Res<Materials>, pos: Pos) {
 fn main() {
     App::build()
         .add_startup_system(setup.system())
-        .add_startup_stage("spawn_entities", SystemStage::single(spawn_entities.system()))
+        .add_startup_stage(
+            "spawn_entities",
+            SystemStage::single(spawn_entities.system()),
+        )
         .add_plugins(DefaultPlugins)
         .add_plugin(PhysicsPlugin)
         .run();
